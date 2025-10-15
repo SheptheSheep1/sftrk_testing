@@ -47,6 +47,8 @@ void loop(){
 		gps.encode(gpsSerial.read());
 	}
 
+	if (gps.location.isUpdated() || gps.date.isUpdated()){display.clearDisplay();}
+
 	if(gps.location.isUpdated()){
 		Serial.print(F("LOCATION   Fix Age="));
 		Serial.print(gps.location.age());
@@ -82,4 +84,6 @@ void loop(){
 		display.setCursor(0,20);
 		display.printf("%d ms %d/%d/%d",gps.date.age(), gps.date.month(), gps.date.day(), gps.date.year());
 	}
+
+	if (gps.location.isUpdated() || gps.date.isUpdated()){display.display();}
 }
