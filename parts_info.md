@@ -1,4 +1,4 @@
-# SafeTrack Parts Knowledge Base
+# sftrk Parts Knowledge Base
 ## Screen
 - ![ssd1306](https://www.datasheethub.com/wp-content/uploads/2022/08/SSD1306-128x64-I2C-OLED-Display-720x720.png)
 - [Store Listing(Budget)](https://www.amazon.com/AITRIP-Display-Self-Luminous-Compatible-Raspberry/dp/B0CT5CJWFK?crid=25WJD2EDOKI47&s=electronics&sprefix=0.96%2Binch%2Boled%2Bssd1306%2Celectronics%2C111&sr=1-11&th=1)
