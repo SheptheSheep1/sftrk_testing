@@ -3,6 +3,7 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 #include <TinyGPSPlus.h>
+#include <RadioLib.h>
 
 // Definitions
 #define LED PIN_015
