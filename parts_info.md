@@ -21,6 +21,8 @@
 
 ## Main MCU (nrf52840) (board: ProMicro)
 - ![nice!nanov2 pinout](https://raw.githubusercontent.com/pdcook/nRFMicro-Arduino-Core/main/supermini_nicenano.png)
+- [High Res IC Pictures](https://imgur.com/a/supermini-nrf52840-WVsA1NP)
+- [High Res Board Pictures](https://imgur.com/a/supermini-nrf52840-s3ZNuny)
 ###### For the above pinout, some of the assignments can be ignored, take a look at `variant.h` for actual bindings, and some can be changed, like $I^2C$
 - names: Pro Micro, Promicro, Nice!Nano, SuperMini nRF52840
 - the ProMicro is designed as a [nice!nanov2](https://nicekeyboards.com/nice-nano/) board clone, usually used for keyboards (split keyboards and such)
