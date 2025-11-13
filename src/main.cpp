@@ -5,6 +5,7 @@
 #include <TinyGPSPlus.h>
 #include <RadioLib.h>
 #include <SPI.h>
+#include <cstdio>
 
 // Definitions
 #define LED PIN_015
@@ -28,6 +29,7 @@ char latBuffer[30]; // Buffer for latitude display
 char lngBuffer[30]; // Buffer for longitude display
 char dateBuffer[30]; // Buffer for date display
 char recvBuffer[64]; // Buffer for LoRa recv display
+char rssiBuffer[30]; // Buffer for rssi
 
 double lastLat = 0;
 double lastLng = 0;
@@ -113,6 +115,17 @@ void setup(){
 	delay(1000);
 	display.clearDisplay();
 	display.display();
+	
+    display.setTextColor(SSD1306_WHITE, SSD1306_BLACK); // White text on black background (for overwr)
+	display.setCursor(0, 0);
+	display.print("Lat: NONE");
+	display.setCursor(0, 10);
+	display.print("Lng: NONE");
+	display.setCursor(0, 20);
+	display.print("Date: NONE");
+	display.setCursor(0, 30);
+	display.print("no message recv");
+	display.display();
 }
 
 void loop() {
@@ -135,12 +148,14 @@ void loop() {
         if (lat != lastLat) {
             lastLat = lat;
             snprintf(latBuffer, sizeof(latBuffer), "Lat: %3.6f", lat);
+            //snprintf(latBuffer, sizeof(latBuffer), "Lat: 30.974632");
             redraw = true;
         }
 
         if (lng != lastLng) {
             lastLng = lng;
             snprintf(lngBuffer, sizeof(lngBuffer), "Lng: %3.6f", lng);
+            //snprintf(lngBuffer, sizeof(lngBuffer), "Lng: -97.777298");
             redraw = true;
         }
 
@@ -186,23 +201,34 @@ void loop() {
 	  //int state = radio.readData(byteArr, numBytes);
 
 	  if (state == RADIOLIB_ERR_NONE) {
+        display.setTextColor(SSD1306_WHITE, SSD1306_BLACK); // Set color for date (also for overwr)
+		display.setCursor(0,30);
+		display.print("                   ");
+		display.setCursor(0,40);
+		display.print("                   ");
+		display.display();
+		char charStr[16];
+		str.toCharArray(charStr, sizeof(charStr));
+		snprintf(recvBuffer, sizeof(recvBuffer), "%s", &charStr);
+        display.setCursor(0, 30); // curosr pos for lora stuff
+        display.print(recvBuffer);
+
+
 	    // packet was successfully received
 	    Serial.println(F("[SX1262] Received packet!"));
 
 	    // print data of the packet
 	    Serial.print(F("[SX1262] Data:\t\t"));
 	    Serial.println(str);
-		char charStr[16];
-		str.toCharArray(charStr, sizeof(charStr));
-		snprintf(recvBuffer, sizeof(recvBuffer), "%s", &charStr);
-        display.setTextColor(SSD1306_WHITE, SSD1306_BLACK); // Set color for date (also for overwr)
-        display.setCursor(0, 30); // curosr pos for lora stuff
-        display.print(recvBuffer);
 
 
 	    // print RSSI (Received Signal Strength Indicator)
+		float rssi = radio.getRSSI();
+		snprintf(rssiBuffer, sizeof(rssiBuffer), "%f dBm", rssi);
+		display.setCursor(0, 40);
+		display.print(rssiBuffer);
 	    Serial.print(F("[SX1262] RSSI:\t\t"));
-	    Serial.print(radio.getRSSI());
+	    Serial.print(rssi);
 	    Serial.println(F(" dBm"));
 
 	    // print SNR (Signal-to-Noise Ratio)
@@ -214,6 +240,7 @@ void loop() {
 	    Serial.print(F("[SX1262] Frequency error:\t"));
 	    Serial.print(radio.getFrequencyError());
 	    Serial.println(F(" Hz"));
+		display.display();
 
 	  } else if (state == RADIOLIB_ERR_CRC_MISMATCH) {
 	    // packet was received, but is malformed
